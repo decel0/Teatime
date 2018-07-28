@@ -31,15 +31,24 @@ namespace Teatime
         public MainWindow()
         {
             InitializeComponent();
+
             _textBoxLogger = new TextBoxLogger(this.LogTextBox);
+
             this.GroupsList.ItemsSource = GetGroups();
             this.GroupsList.SelectedIndex = 0;
             this.GroupsList.Focus();
+
+            List<Participant> participants = new List<Participant>();
+            participants.Add(RobertJohnson);
+            participants.Add(JasonSmith);
+            participants.Add(LisaDavis);
+            participants.Add(AmyRobinson);
+            this.EmailAccountComboBox.ItemsSource = participants;
         }
 
         private IEnumerable GetGroups()
         {
-            ArrayList groups = new ArrayList();
+            List<Group> groups = new List<Group>();
 
             {
                 {
@@ -116,6 +125,22 @@ namespace Teatime
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
             EmailService.SendMessage(RobertJohnson, JasonSmith, _textBoxLogger);
+        }
+
+        private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        }
+
+        private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void AddTopicButton_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void AddMessageButton_OnClick(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

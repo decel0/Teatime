@@ -7,40 +7,83 @@
         xmlns:model="clr-namespace:Teatime.Model"
         mc:Ignorable="d"
         Title="Teatime" Width="1024" Height="768">
-    <Grid Margin="0,0,0,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <ListView x:Name="GroupsList" Margin="10,10,10,10" SelectionMode="Single" SelectionChanged="GroupsList_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Group.DisplayText)}" Name="convTitle" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <ListView x:Name="TopicsList" Grid.Column="1" Margin="0,10,10,10"  SelectionMode="Single" SelectionChanged="TopicsList_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Topic.DisplayText)}" Name="msgTitle" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <ListView x:Name="MessagesList" Grid.Column="2" Margin="0,10,10,10" >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Message.DisplayText)}" Name="msgTitle" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Grid.Column="3">
-            <Button x:Name="ListFoldersButton" Content="List Folders" Margin="10,10,10,0" Click="ListFoldersButton_Click"/>
-            <Button x:Name="ListMessagesButton" Content="List Messages" Margin="10,10,10,0" Click="ListMessagesButton_Click"/>
-            <Button x:Name="SendMessageButton" Content="Send Message"  Margin="10,10,10,0" Click="SendMessageButton_Click"/>
-            <TextBox x:Name="LogTextBox" Height="600" TextWrapping="Wrap" Margin="10,10,10,0" />
-        </StackPanel>
-    </Grid>
+    <DockPanel>
+        <Grid Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Label Content="E-Mail Account:" HorizontalAlignment="Left" Margin="5,10,10,0" />
+                <ComboBox x:Name="EmailAccountComboBox" Margin="0,10,10,0" Width="200" SelectionChanged="EmailAccountComboBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding (model:Participant.Name)}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="0,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Groups" HorizontalAlignment="Left" Margin="5,0,0,0" />
+                <Label Grid.Row="0" Grid.Column="1" Content="Topics" HorizontalAlignment="Left" Margin="-5,0,0,0" />
+                <Label Grid.Row="0" Grid.Column="2" Content="Messages" HorizontalAlignment="Left" Margin="-5,0,0,0" />
+                <ListView x:Name="GroupsList" Grid.Row="1" Grid.Column="0" Margin="10,0,10,10" SelectionMode="Single" SelectionChanged="GroupsList_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Group.DisplayText)}" Name="convTitle" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView x:Name="TopicsList" Grid.Row="1" Grid.Column="1" Margin="0,0,10,10"  SelectionMode="Single" SelectionChanged="TopicsList_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Topic.DisplayText)}" Name="msgTitle" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView x:Name="MessagesList" Grid.Row="1" Grid.Column="2" Margin="0,0,10,10" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Message.DisplayText)}" Name="msgTitle" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Grid.Row="1" Grid.Column="3">
+                    <Button x:Name="ListFoldersButton" Content="List Folders" Margin="10,0,10,0" Click="ListFoldersButton_Click"/>
+                    <Button x:Name="ListMessagesButton" Content="List Messages" Margin="10,10,10,0" Click="ListMessagesButton_Click"/>
+                    <Button x:Name="SendMessageButton" Content="Send Message"  Margin="10,10,10,0" Click="SendMessageButton_Click"/>
+                    <TextBox x:Name="LogTextBox" Height="500" TextWrapping="Wrap" Margin="10,10,10,0" />
+                </StackPanel>
+                <Button Grid.Row="2" Grid.Column="0" x:Name="CreateGroupButton" Content="Create Group" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="CreateGroupButton_OnClick" />
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="TopicNameTextBox" Padding="5,5,5,5" Margin="0,0,0,10" ></TextBox>
+                    <Button Grid.Column="1" x:Name="AddTopicButton" Content="Add Topic" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="AddTopicButton_OnClick" />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="MessageBodyTextBox" Padding="5,5,5,5" Margin="0,0,10,10" ></TextBox>
+                    <Button Grid.Column="1" x:Name="AddMessageButton" Content="Add Message" Margin="0,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="AddMessageButton_OnClick" />
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Window>
 
