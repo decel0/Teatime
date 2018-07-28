@@ -141,6 +141,42 @@ namespace Teatime
 
         private void AddMessageButton_OnClick(object sender, RoutedEventArgs e)
         {
+            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
+            if (currentUser == null)
+            {
+                ShowErrorMessageBox("No e-mail account selected.");
+                return;
+            }
+
+            Topic topic = (Topic)this.TopicsList.SelectedItem;
+            if (topic == null)
+            {
+                ShowErrorMessageBox("No topic selected.");
+                return;
+            }
+
+            string messageBody = this.MessageBodyTextBox.Text;
+            if (string.IsNullOrWhiteSpace(messageBody))
+            {
+                ShowErrorMessageBox("No message entered.");
+                return;
+            }
+
+            Message message = new Message { Sender = currentUser, Body = messageBody };
+            topic.Messages.Add(message);
+
+            this.MessageBodyTextBox.Clear();
+
+            this.MessagesList.ScrollIntoView(message);
+            this.MessagesList.SelectedIndex = this.MessagesList.Items.Count - 1;
+        }
+
+        private static void ShowErrorMessageBox(string messageBoxText)
+        {
+            string caption = "Error";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBox.Show(messageBoxText, caption, button, icon);
         }
     }
 }

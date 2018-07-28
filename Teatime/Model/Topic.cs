@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Teatime.Model
 {
@@ -6,7 +7,7 @@ namespace Teatime.Model
     {
         public string Name { get; set; }
 
-        public List<Message> Messages = new List<Message>();
+        public ObservableCollection<Message> Messages = new ObservableCollection<Message>();
 
         public string DisplayText => $"{Messages[0].Sender.DisplayText}: {this.Name}";
     }
