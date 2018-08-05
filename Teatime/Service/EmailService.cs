@@ -1,9 +1,11 @@
 ﻿using System;
-
+using System.Collections;
+using System.Collections.Generic;
 using MailKit.Net.Imap;
 using MailKit;
 using MimeKit;
 using MailKit.Net.Smtp;
+using MailKit.Search;
 using Newtonsoft.Json;
 using Teatime.Model;
 using Teatime.Utils;
@@ -62,10 +64,16 @@ namespace Teatime.Service
                 {
                     var message = inbox.GetMessage(i);
                     logger.Log($"Subject: {message.Subject}");
-                    string xml = message.TextBody;
-                    TeatimeEmail tm = XmlConvert.DeserializeObject<TeatimeEmail>(xml);
-                    logger.Log($"Type: {tm.Type}");
-                    logger.Log($"Id: {tm.Id}");
+                    string body = message.TextBody;
+                    TeatimeEmail tm = JsonConvert.DeserializeObject<TeatimeEmail>(body);
+                    //TeatimeEmail tm = XmlConvert.DeserializeObject<TeatimeEmail>(body);
+                    logger.Log($"From: {tm.FromEmailAddress}");
+                    foreach (string toEmailAddress in tm.ToEmailAddresses)
+                    {
+                        logger.Log($"To: {toEmailAddress}");
+                    }
+                    logger.Log($"Topic: {tm.TopicName}");
+                    logger.Log($"Message: {tm.MessageText}");
                 }
 
                 foreach (var summary in inbox.Fetch(0, -1, MessageSummaryItems.Full | MessageSummaryItems.UniqueId))
@@ -90,11 +98,13 @@ namespace Teatime.Service
                 message.Subject = "Hello at " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 TeatimeEmail m = new TeatimeEmail();
-                m.Type = "TopicStarter";
-                m.Id = Guid.NewGuid();
+                m.FromEmailAddress = sender.EmailAddress;
+                m.ToEmailAddresses = new List<string>(new [] { recipient.EmailAddress });
+                m.TopicName = "Topic1";
+                m.MessageText = "Message1";
 
-                //message.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(m) };
-                message.Body = new TextPart("plain") { Text = XmlConvert.SerializeObject(m) };
+                message.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(m) };
+                //message.Body = new TextPart("plain") { Text = XmlConvert.SerializeObject(m) };
 
                 client.Send(message);
                 logger.Log($"Message sent.");
