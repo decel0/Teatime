@@ -101,7 +101,7 @@ namespace Teatime.Service
                 te.FromEmailAddress = sender.EmailAddress;
                 te.ToEmailAddresses = new List<string>(new [] { recipient.EmailAddress });
                 te.TopicName = "Topic1";
-                te.MessageText = "Message1";
+                te.MessageText = "Message" + DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
                 message.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(te, Formatting.Indented) };
                 //message.Body = new TextPart("plain") { Text = XmlConvert.SerializeObject(te) };
