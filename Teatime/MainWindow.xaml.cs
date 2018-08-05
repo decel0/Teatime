@@ -34,9 +34,7 @@ namespace Teatime
 
             _textBoxLogger = new TextBoxLogger(this.LogTextBox);
 
-            this.GroupsList.ItemsSource = GetGroups();
-            this.GroupsList.SelectedIndex = 0;
-            this.GroupsList.Focus();
+//            ShowSampleData();
 
             List<Participant> participants = new List<Participant>();
             participants.Add(RobertJohnson);
@@ -44,6 +42,13 @@ namespace Teatime
             participants.Add(LisaDavis);
             participants.Add(AmyRobinson);
             this.EmailAccountComboBox.ItemsSource = participants;
+        }
+
+        private void ShowSampleData()
+        {
+            this.GroupsList.ItemsSource = GetGroups();
+            this.GroupsList.SelectedIndex = 0;
+            this.GroupsList.Focus();
         }
 
         private IEnumerable GetGroups()
