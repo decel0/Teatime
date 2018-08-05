@@ -95,7 +95,7 @@ namespace Teatime.Service
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(sender.Name, sender.EmailAddress));
                 message.To.Add(new MailboxAddress(recipient.Name, recipient.EmailAddress));
-                message.Subject = "Hello at " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                message.Subject = TeatimeEmail.SubjectTag + " " + DateTime.Now.ToString("o");
 
                 TeatimeEmail m = new TeatimeEmail();
                 m.FromEmailAddress = sender.EmailAddress;
@@ -103,7 +103,7 @@ namespace Teatime.Service
                 m.TopicName = "Topic1";
                 m.MessageText = "Message1";
 
-                message.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(m) };
+                message.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(m, Formatting.Indented) };
                 //message.Body = new TextPart("plain") { Text = XmlConvert.SerializeObject(m) };
 
                 client.Send(message);
