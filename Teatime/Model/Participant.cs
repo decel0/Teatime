@@ -11,5 +11,16 @@
         public string EmailPassword { get; set; }
 
         //public ??? AvatarThumbnail { get; set; }
+
+        public Participant()
+        {
+        }
+
+        public Participant(string emailAddress)
+        {
+            Name = emailAddress.Split('@')[0].ToUpperInvariant();
+            DisplayText = Name;
+            EmailAddress = emailAddress;
+        }
     }
 }

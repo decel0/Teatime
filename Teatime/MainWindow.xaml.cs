@@ -99,8 +99,15 @@ namespace Teatime
         private void GroupsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Group group = (Group) this.GroupsList.SelectedItem;
-            this.TopicsList.ItemsSource = group.Topics;
-            this.TopicsList.SelectedIndex = 0;
+            if (group != null)
+            {
+                this.TopicsList.ItemsSource = group.Topics;
+                this.TopicsList.SelectedIndex = 0;
+            }
+            else
+            {
+                this.TopicsList.ItemsSource = null;
+            }
         }
 
         private void TopicsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -109,6 +116,15 @@ namespace Teatime
             if (topic != null)
             {
                 this.MessagesList.ItemsSource = topic.Messages;
+                if (topic.Messages.Count > 0)
+                {
+                    this.MessagesList.SelectedIndex = 0;
+                    this.MessageBodyTextBox.Focus();
+                }
+            }
+            else
+            {
+                this.MessagesList.ItemsSource = null;
             }
         }
 
@@ -129,6 +145,14 @@ namespace Teatime
 
         private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
+            List<Group> groups = EmailService.LoadData(currentUser);
+            this.GroupsList.ItemsSource = groups;
+            if (groups.Count > 0)
+            {
+                this.GroupsList.SelectedIndex = 0;
+                this.MessageBodyTextBox.Focus();
+            }
         }
 
         private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)

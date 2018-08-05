@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Teatime.Model
 {
-    class Group
+    public class Group
     {
         public List<Participant> Participants = new List<Participant>();
 
