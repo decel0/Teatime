@@ -150,7 +150,23 @@ namespace Teatime
 
         private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
+            Reload();
+        }
+
+        private void ReloadButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Reload();
+        }
+
+        private void Reload()
+        {
+            Participant currentUser = (Participant) this.EmailAccountComboBox.SelectedItem;
+            if (currentUser == null)
+            {
+                ShowErrorMessageBox("No e-mail account selected.");
+                return;
+            }
+
             List<Group> groups = EmailService.LoadData(currentUser);
             this.GroupsList.ItemsSource = groups;
             if (groups.Count > 0)
