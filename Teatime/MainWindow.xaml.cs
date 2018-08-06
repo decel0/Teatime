@@ -177,8 +177,15 @@ namespace Teatime
                 return;
             }
 
-            Topic topic = (Topic)this.TopicsList.SelectedItem;
-            if (topic == null)
+            Group g = (Group)this.GroupsList.SelectedItem;
+            if (g == null)
+            {
+                ShowErrorMessageBox("No topic selected.");
+                return;
+            }
+
+            Topic t = (Topic)this.TopicsList.SelectedItem;
+            if (t == null)
             {
                 ShowErrorMessageBox("No topic selected.");
                 return;
@@ -191,8 +198,10 @@ namespace Teatime
                 return;
             }
 
+            EmailService.SendMessage(currentUser, g.Participants.ToList(), t.Name, messageBody);
+
             Message message = new Message { Sender = currentUser, Body = messageBody };
-            topic.Messages.Add(message);
+            t.Messages.Add(message);
 
             this.MessageBodyTextBox.Clear();
 

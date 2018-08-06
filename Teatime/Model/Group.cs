@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Teatime.Model
 {
     public class Group
     {
-        public List<Participant> Participants = new List<Participant>();
+        public SortedSet<Participant> Participants = new SortedSet<Participant>(Comparer<Participant>.Create((a, b) => string.Compare(a.EmailAddress, b.EmailAddress, StringComparison.CurrentCultureIgnoreCase)));
 
         public List<Topic> Topics = new List<Topic>();
 
