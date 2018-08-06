@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Service\DebugEmailService.cs" />
     <Compile Include="Service\EmailService.cs" />
     <Compile Include="Service\TeatimeEmail.cs" />
     <Compile Include="Utils\ParticipantFactory.cs" />

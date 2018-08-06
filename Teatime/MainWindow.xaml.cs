@@ -135,17 +135,17 @@ namespace Teatime
 
         private void ListFoldersButton_Click(object sender, RoutedEventArgs e)
         {
-            EmailService.ListInboxFolders(RobertJohnson, _textBoxLogger);
+            DebugEmailService.ListInboxFolders(RobertJohnson, _textBoxLogger);
         }
 
         private void ListMessagesButton_Click(object sender, RoutedEventArgs e)
         {
-            EmailService.ListInboxMessages(JasonSmith, _textBoxLogger);
+            DebugEmailService.ListInboxMessages(JasonSmith, _textBoxLogger);
         }
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-            EmailService.SendMessage(RobertJohnson, JasonSmith, _textBoxLogger);
+            DebugEmailService.SendMessage(RobertJohnson, JasonSmith, _textBoxLogger);
         }
 
         private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
