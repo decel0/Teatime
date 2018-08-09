@@ -10,6 +10,6 @@ namespace Teatime.Model
 
         public List<Topic> Topics = new List<Topic>();
 
-        public string DisplayText => string.Join(", ", Participants.Select(p => p.DisplayText));
+        public string DisplayText => string.Join(", ", this.Participants.Select(p => p.DisplayText));
     }
 }

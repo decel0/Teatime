@@ -18,14 +18,14 @@
 
         public Participant(string emailAddress)
         {
-            Name = emailAddress.Split('@')[0].ToUpperInvariant();
-            DisplayText = Name;
-            EmailAddress = emailAddress;
+            this.Name = emailAddress.Split('@')[0].ToUpperInvariant();
+            this.DisplayText = this.Name;
+            this.EmailAddress = emailAddress;
         }
 
         protected bool Equals(Participant other)
         {
-            return string.Equals(EmailAddress, other.EmailAddress);
+            return string.Equals(this.EmailAddress, other.EmailAddress);
         }
 
         public override bool Equals(object obj)
@@ -33,12 +33,12 @@
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Participant) obj);
+            return this.Equals((Participant) obj);
         }
 
         public override int GetHashCode()
         {
-            return (EmailAddress != null ? EmailAddress.GetHashCode() : 0);
+            return (this.EmailAddress != null ? this.EmailAddress.GetHashCode() : 0);
         }
     }
 }

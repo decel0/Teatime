@@ -9,16 +9,16 @@ namespace Teatime.Utils
 
     public class TextBoxLogger : ILogger
     {
-        private readonly TextBox _logTextBox;
+        private readonly TextBox logTextBox;
 
         public TextBoxLogger(TextBox logTextBox)
         {
-            _logTextBox = logTextBox;
+            this.logTextBox = logTextBox;
         }
 
         public void Log(string text)
         {
-            _logTextBox.Text += text + "\r\n";
+            this.logTextBox.Text += text + "\r\n";
         }
     }
 }

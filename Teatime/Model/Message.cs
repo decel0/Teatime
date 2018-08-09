@@ -8,7 +8,7 @@ namespace Teatime.Model
 
         public string Body { get; set; }
 
-        public string DisplayText => $"{Sender.DisplayText}: {this.Body}";
+        public string DisplayText => $"{this.Sender.DisplayText}: {this.Body}";
 
         //public List<object> Images { get; }
     }

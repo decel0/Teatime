@@ -8,6 +8,6 @@ namespace Teatime.Model
 
         public ObservableCollection<Message> Messages = new ObservableCollection<Message>();
 
-        public string DisplayText => $"{Messages[0].Sender.DisplayText}: {this.Name}";
+        public string DisplayText => $"{this.Messages[0].Sender.DisplayText}: {this.Name}";
     }
 }

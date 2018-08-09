@@ -27,15 +27,15 @@ namespace Teatime
         public static readonly Participant AmyRobinson = ParticipantFactory.CreateParticipant("Amy Robinson");
         public static readonly List<Participant> Participants = new List<Participant>();
 
-        private readonly TextBoxLogger _textBoxLogger;
+        private readonly TextBoxLogger textBoxLogger;
 
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            _textBoxLogger = new TextBoxLogger(this.LogTextBox);
+            this.textBoxLogger = new TextBoxLogger(this.LogTextBox);
 
 //            ShowSampleData();
 
@@ -88,27 +88,27 @@ namespace Teatime
 
         private void ListFoldersButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugEmailService.ListInboxFolders(RobertJohnson, _textBoxLogger);
+            DebugEmailService.ListInboxFolders(RobertJohnson, this.textBoxLogger);
         }
 
         private void ListMessagesButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugEmailService.ListInboxMessages(JasonSmith, _textBoxLogger);
+            DebugEmailService.ListInboxMessages(JasonSmith, this.textBoxLogger);
         }
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugEmailService.SendMessage(RobertJohnson, JasonSmith, _textBoxLogger);
+            DebugEmailService.SendMessage(RobertJohnson, JasonSmith, this.textBoxLogger);
         }
 
         private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Reload();
+            this.Reload();
         }
 
         private void ReloadButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Reload();
+            this.Reload();
         }
 
         private void Reload()
@@ -211,7 +211,7 @@ namespace Teatime
 
         private static void ShowErrorMessageBox(string messageBoxText)
         {
-            string caption = "Error";
+            const string caption = "Error";
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage icon = MessageBoxImage.Error;
             MessageBox.Show(messageBoxText, caption, button, icon);
