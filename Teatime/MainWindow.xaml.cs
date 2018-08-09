@@ -128,6 +128,8 @@ namespace Teatime
 
         private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)
         {
+            CreateGroupWindow w = new CreateGroupWindow();
+            w.ShowDialog();
         }
 
         private void AddTopicButton_OnClick(object sender, RoutedEventArgs e)

@@ -67,6 +67,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateGroupWindow.xaml.cs">
+      <DependentUpon>CreateGroupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleDataGenerator.cs" />
     <Compile Include="Service\DebugEmailService.cs" />
     <Compile Include="Service\EmailService.cs" />
@@ -74,6 +77,10 @@
     <Compile Include="Utils\ParticipantFactory.cs" />
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\XmlConvert.cs" />
+    <Page Include="CreateGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
