@@ -25,6 +25,7 @@ namespace Teatime
         public static readonly Participant JasonSmith = ParticipantFactory.CreateParticipant("Jason Smith");
         public static readonly Participant LisaDavis = ParticipantFactory.CreateParticipant("Lisa Davis");
         public static readonly Participant AmyRobinson = ParticipantFactory.CreateParticipant("Amy Robinson");
+        public static readonly List<Participant> Participants = new List<Participant>();
 
         private readonly TextBoxLogger _textBoxLogger;
 
@@ -32,16 +33,18 @@ namespace Teatime
         {
             InitializeComponent();
 
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
             _textBoxLogger = new TextBoxLogger(this.LogTextBox);
 
 //            ShowSampleData();
 
-            List<Participant> participants = new List<Participant>();
-            participants.Add(RobertJohnson);
-            participants.Add(JasonSmith);
-            participants.Add(LisaDavis);
-            participants.Add(AmyRobinson);
-            this.EmailAccountComboBox.ItemsSource = participants;
+            Participants.Add(RobertJohnson);
+            Participants.Add(JasonSmith);
+            Participants.Add(LisaDavis);
+            Participants.Add(AmyRobinson);
+
+            this.EmailAccountComboBox.ItemsSource = Participants;
         }
 
         private void ShowSampleData()
@@ -128,8 +131,37 @@ namespace Teatime
 
         private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)
         {
-            CreateGroupWindow w = new CreateGroupWindow();
+            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
+            if (currentUser == null)
+            {
+                ShowErrorMessageBox("No e-mail account selected.");
+                return;
+            }
+
+            List<Participant> participants = Participants.Where(p => p.EmailAddress != currentUser.EmailAddress).ToList();
+            CreateGroupWindow w = new CreateGroupWindow(participants);
             w.ShowDialog();
+            List<Participant> selectedParticipants = w.SelectedParticipants;
+
+            if (selectedParticipants == null) return;
+
+            Group newGroup = new Group();
+            newGroup.Participants.Add(currentUser);
+            selectedParticipants.ForEach(p => newGroup.Participants.Add(p));
+
+            List<Group> newGroups = new List<Group>();
+            if (this.GroupsList.ItemsSource != null)
+            {
+                foreach (object i in this.GroupsList.ItemsSource)
+                {
+                    newGroups.Add((Group) i);
+                }
+            }
+            newGroups.Add(newGroup);
+
+            this.GroupsList.ItemsSource = newGroups;
+            this.GroupsList.SelectedItem = newGroup;
+            this.GroupsList.Focus();
         }
 
         private void AddTopicButton_OnClick(object sender, RoutedEventArgs e)

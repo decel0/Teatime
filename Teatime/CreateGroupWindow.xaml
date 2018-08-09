@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Teatime"
         xmlns:model="clr-namespace:Teatime.Model"
         mc:Ignorable="d"
-        Title="CreateGroupWindow" Height="500" Width="300">
+        Title="Create Group" Height="500" Width="300">
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -18,7 +18,7 @@
         <ListView x:Name="ParticipantList" Grid.Row="0" Grid.Column="0" Margin="10,10,10,10" SelectionMode="Multiple" SelectionChanged="ParticipantList_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Participant.DisplayText)}" Name="convTitle" />
+                    <TextBlock Margin="10" Cursor="Hand" Text="{Binding (model:Participant.Name)}" Name="convTitle" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
