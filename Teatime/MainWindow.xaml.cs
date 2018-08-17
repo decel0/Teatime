@@ -21,10 +21,10 @@ namespace Teatime
 {
     public partial class MainWindow : Window
     {
-        public static readonly Participant RobertJohnson = ParticipantFactory.CreateParticipant("Robert Johnson");
-        public static readonly Participant JasonSmith = ParticipantFactory.CreateParticipant("Jason Smith");
-        public static readonly Participant LisaDavis = ParticipantFactory.CreateParticipant("Lisa Davis");
-        public static readonly Participant AmyRobinson = ParticipantFactory.CreateParticipant("Amy Robinson");
+        public static readonly Participant RobertJ = ParticipantFactory.CreateParticipant("Robert Johnson");
+        public static readonly Participant JasonS = ParticipantFactory.CreateParticipant("Jason Smith");
+        public static readonly Participant LisaD = ParticipantFactory.CreateParticipant("Lisa Davis");
+        public static readonly Participant AmyR = ParticipantFactory.CreateParticipant("Amy Robinson");
         public static readonly List<Participant> Participants = new List<Participant>();
 
         private readonly TextBoxLogger textBoxLogger;
@@ -37,21 +37,12 @@ namespace Teatime
 
             this.textBoxLogger = new TextBoxLogger(this.LogTextBox);
 
-//            ShowSampleData();
-
-            Participants.Add(RobertJohnson);
-            Participants.Add(JasonSmith);
-            Participants.Add(LisaDavis);
-            Participants.Add(AmyRobinson);
+            Participants.Add(RobertJ);
+            Participants.Add(JasonS);
+            Participants.Add(LisaD);
+            Participants.Add(AmyR);
 
             this.EmailAccountComboBox.ItemsSource = Participants;
-        }
-
-        private void ShowSampleData()
-        {
-            this.GroupsList.ItemsSource = SampleDataGenerator.GetGroups();
-            this.GroupsList.SelectedIndex = 0;
-            this.GroupsList.Focus();
         }
 
         private void GroupsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -88,17 +79,17 @@ namespace Teatime
 
         private void ListFoldersButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugEmailService.ListInboxFolders(RobertJohnson, this.textBoxLogger);
+            DebugEmailService.ListInboxFolders(RobertJ, this.textBoxLogger);
         }
 
         private void ListMessagesButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugEmailService.ListInboxMessages(JasonSmith, this.textBoxLogger);
+            DebugEmailService.ListInboxMessages(JasonS, this.textBoxLogger);
         }
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugEmailService.SendMessage(RobertJohnson, JasonSmith, this.textBoxLogger);
+            DebugEmailService.SendMessage(RobertJ, JasonS, this.textBoxLogger);
         }
 
         private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -146,22 +137,27 @@ namespace Teatime
             if (selectedParticipants == null) return;
 
             Group newGroup = new Group();
-            newGroup.Participants.Add(currentUser);
             selectedParticipants.ForEach(p => newGroup.Participants.Add(p));
 
             List<Group> newGroups = new List<Group>();
+            bool groupAlreadyExists = false;
             if (this.GroupsList.ItemsSource != null)
             {
                 foreach (object i in this.GroupsList.ItemsSource)
                 {
-                    newGroups.Add((Group) i);
+                    Group g = (Group) i;
+                    newGroups.Add(g);
+                    if (g.DisplayText.Equals(newGroup.DisplayText, StringComparison.CurrentCultureIgnoreCase)) groupAlreadyExists = true;
                 }
             }
-            newGroups.Add(newGroup);
 
-            this.GroupsList.ItemsSource = newGroups;
-            this.GroupsList.SelectedItem = newGroup;
-            this.GroupsList.Focus();
+            if (!groupAlreadyExists)
+            {
+                newGroups.Add(newGroup);
+                this.GroupsList.ItemsSource = newGroups;
+                this.GroupsList.SelectedItem = newGroup;
+                this.GroupsList.Focus();
+            }
         }
 
         private void AddTopicButton_OnClick(object sender, RoutedEventArgs e)
@@ -215,6 +211,11 @@ namespace Teatime
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage icon = MessageBoxImage.Error;
             MessageBox.Show(messageBoxText, caption, button, icon);
+        }
+
+        private void GenerateSampleData_Click(object sender, RoutedEventArgs e)
+        {
+            SampleDataGenerator.Generate();
         }
     }
 }

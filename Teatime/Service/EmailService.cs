@@ -17,11 +17,10 @@ namespace Teatime.Service
         private const string Host = "hmail.local";
         private const int ImapPort = 143;
         private const int SmtpPort = 25;
-        private const bool SendToSender = true;
 
         public static void SendMessage(Participant sender, List<Participant> recipients, string topicName, string messageText)
         {
-            List<Participant> actualRecipients = GetActualRecipients(sender, recipients);
+            List<Participant> actualRecipients = recipients.Where(r => !r.Equals(sender)).ToList(); // Don't send to sender. Rely on local lie and SENT ITEMS.
 
             using (var client = new SmtpClient())
             {
@@ -47,15 +46,6 @@ namespace Teatime.Service
             }
         }
 
-        [SuppressMessage("ReSharper", "UnreachableCode")]
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
-        private static List<Participant> GetActualRecipients(Participant sender, List<Participant> recipients)
-        {
-#pragma warning disable 162
-            return SendToSender ? recipients : recipients.Where(r => !r.Equals(sender)).ToList();
-#pragma warning restore 162
-        }
-
         public static List<Group> LoadData(Participant inboxOwner)
         {
             Dictionary<string, Group> groups = new Dictionary<string, Group>();
@@ -78,7 +68,7 @@ namespace Teatime.Service
                     MimeMessage mimeMessage = inbox.GetMessage(messageId);
                     TeatimeEmail te = JsonConvert.DeserializeObject<TeatimeEmail>(mimeMessage.TextBody);
                     Participant sender = new Participant(te.FromEmailAddress);
-                    Group g = AddOrGetGroup(groups, sender, te.ToEmailAddresses);
+                    Group g = AddOrGetGroup(groups, sender.EmailAddress, inboxOwner.EmailAddress, te.ToEmailAddresses);
                     Topic t = AddOrGetTopic(g, te.TopicName);
                     AddMessage(t, sender, te.MessageText);
                 }
@@ -89,11 +79,14 @@ namespace Teatime.Service
             return groups.Values.ToList();
         }
 
-        private static Group AddOrGetGroup(Dictionary<string, Group> groups, Participant sender,
+        private static Group AddOrGetGroup(
+            Dictionary<string, Group> groups, 
+            string senderEmailAddress, 
+            string inboxOwnerEmailAddress, 
             List<string> toEmailAddresses)
         {
             Group g = new Group();
-            AddParticipantsToGroup(g, sender, toEmailAddresses);
+            AddParticipantsToGroup(g, senderEmailAddress, inboxOwnerEmailAddress, toEmailAddresses);
 
             if (groups.ContainsKey(g.DisplayText))
             {
@@ -108,12 +101,20 @@ namespace Teatime.Service
         }
 
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
-        private static void AddParticipantsToGroup(Group g, Participant sender, List<string> toEmailAddresses)
+        private static void AddParticipantsToGroup(
+            Group g, 
+            string senderEmailAddress, 
+            string inboxOwnerEmailAddress,
+            List<string> toEmailAddresses)
         {
-            if (SendToSender) g.Participants.Add(sender);
+            g.Participants.Add(new Participant(senderEmailAddress));
+
             foreach (string toEmailAddress in toEmailAddresses)
             {
-                g.Participants.Add(new Participant(toEmailAddress));
+                if (!toEmailAddress.Equals(inboxOwnerEmailAddress))
+                {
+                    g.Participants.Add(new Participant(toEmailAddress));
+                }
             }
         }
 
