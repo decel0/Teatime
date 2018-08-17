@@ -32,12 +32,12 @@ namespace Teatime.Service
 
                 if ((client.Capabilities & (ImapCapabilities.SpecialUse | ImapCapabilities.XList)) != 0)
                 {
-                    IMailFolder drafts = client.GetFolder(SpecialFolder.Drafts);
-                    logger.Log($"[special folder] {drafts.Name}");
+                    IMailFolder drafts = client.GetFolder(SpecialFolder.Sent);
+                    logger.Log($"[special SENT folder] {drafts.Name}");
                 }
                 else
                 {
-                    logger.Log("unable to get special folders");
+                    logger.Log("unable to get special SENT folder");
                 }
 
                 client.Disconnect(true);
