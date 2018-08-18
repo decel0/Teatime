@@ -185,8 +185,10 @@ namespace Teatime
 
             Topic newTopic = new Topic { Name = newTopicName, Starter = currentUser };
             currentGroup.Topics.Add(newTopic);
-            this.TopicsList.ItemsSource = currentGroup.Topics;
-            this.TopicsList.SelectedItem = newTopic;
+            
+            this.TopicNameTextBox.Clear();
+            this.TopicsList.ScrollIntoView(newTopic);
+            this.TopicsList.SelectedIndex = this.TopicsList.Items.Count - 1;
         }
 
         private void AddMessageButton_OnClick(object sender, RoutedEventArgs e)
@@ -221,12 +223,11 @@ namespace Teatime
 
             EmailService.SendMessage(currentUser, g.Participants.ToList(), t.Name, messageBody);
 
-            Message message = new Message { Sender = currentUser, Body = messageBody };
-            t.Messages.Add(message);
+            Message newMessage = new Message { Sender = currentUser, Body = messageBody };
+            t.Messages.Add(newMessage);
 
             this.MessageBodyTextBox.Clear();
-
-            this.MessagesList.ScrollIntoView(message);
+            this.MessagesList.ScrollIntoView(newMessage);
             this.MessagesList.SelectedIndex = this.MessagesList.Items.Count - 1;
         }
 
