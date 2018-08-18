@@ -23,3 +23,10 @@ No, we need less social networks. Teatime is just an app that helps you stay in 
 ## What's the recommended way to use Teatime?
 
 Make yourself a cup of tea. While your tea steeps, turn on your computer. While your computer starts up, gather your thoughts; think about the people who matter most to you. Start the Teatime app; it will download updates from your e-mail account. Start reading your updates! Have your tea and respond to your updates as you go. Is there someone you haven't been in touch with for a while? Send them an update! When you're all done, tell Teatime to send out all of your updates. Close the Teatime app. Shut down your computer. Think about how and when you're going to see your family and friends in person. Now go spend some time outside, ideally with friends or family! Bonus: leave your cell phone at home!
+
+# License
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+![Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)
+
