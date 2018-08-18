@@ -20,7 +20,7 @@ namespace Teatime.Service
 
         public static void SendMessage(Participant sender, List<Participant> recipients, string topicName, string messageText)
         {
-            List<Participant> actualRecipients = recipients.Where(r => !r.Equals(sender)).ToList(); // Don't send to sender. Rely on local lie and SENT ITEMS.
+            List<Participant> actualRecipients = recipients.Where(r => !r.Equals(sender)).ToList(); // Don't send to sender. Rely on local lie.
 
             using (var client = new SmtpClient())
             {
