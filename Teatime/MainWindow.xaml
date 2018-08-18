@@ -61,7 +61,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <StackPanel Grid.Row="1" Grid.Column="3">
-                    <Button x:Name="GenerateSampleDataButton" Content="Generate Sample Data" Margin="10,10,10,0" Click="GenerateSampleData_Click"/>
+                    <Button x:Name="GenerateSampleDataButton" Content="Generate Sample Data" Margin="10,0,10,0" Click="GenerateSampleData_Click"/>
                     <Button x:Name="ListFoldersButton" Content="List Folders" Margin="10,10,10,0" Click="ListFoldersButton_Click"/>
                     <Button x:Name="ListMessagesButton" Content="List Messages" Margin="10,10,10,0" Click="ListMessagesButton_Click"/>
                     <Button x:Name="SendMessageButton" Content="Send Message"  Margin="10,10,10,0" Click="SendMessageButton_Click"/>
