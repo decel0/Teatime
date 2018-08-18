@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Teatime.Model
@@ -8,7 +9,7 @@ namespace Teatime.Model
     {
         public SortedSet<Participant> Participants = new SortedSet<Participant>(Comparer<Participant>.Create((a, b) => string.Compare(a.EmailAddress, b.EmailAddress, StringComparison.CurrentCultureIgnoreCase)));
 
-        public List<Topic> Topics = new List<Topic>();
+        public ObservableCollection<Topic> Topics = new ObservableCollection<Topic>();
 
         public string DisplayText => string.Join(", ", this.Participants.Select(p => p.DisplayText));
     }

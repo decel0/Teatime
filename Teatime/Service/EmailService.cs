@@ -69,7 +69,7 @@ namespace Teatime.Service
                     TeatimeEmail te = JsonConvert.DeserializeObject<TeatimeEmail>(mimeMessage.TextBody);
                     Participant sender = new Participant(te.FromEmailAddress);
                     Group g = AddOrGetGroup(groups, sender.EmailAddress, inboxOwner.EmailAddress, te.ToEmailAddresses);
-                    Topic t = AddOrGetTopic(g, te.TopicName);
+                    Topic t = AddOrGetTopic(g, sender, te.TopicName);
                     AddMessage(t, sender, te.MessageText);
                 }
 
@@ -118,16 +118,16 @@ namespace Teatime.Service
             }
         }
 
-        private static Topic AddOrGetTopic(Group g, string topicName)
+        private static Topic AddOrGetTopic(Group g, Participant sender, string topicName)
         {
-            Topic t = g.Topics.Find(i => i.Name.Equals(topicName));
+            Topic t = g.Topics.SingleOrDefault(i => i.Name.Equals(topicName));
 
             if (t == null)
             {
                 t = new Topic();
                 t.Name = topicName;
+                t.Starter = sender;
                 g.Topics.Add(t);
-
             }
 
             return t;

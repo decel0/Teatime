@@ -162,6 +162,31 @@ namespace Teatime
 
         private void AddTopicButton_OnClick(object sender, RoutedEventArgs e)
         {
+            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
+            if (currentUser == null)
+            {
+                ShowErrorMessageBox("No e-mail account selected.");
+                return;
+            }
+
+            Group currentGroup = (Group)this.GroupsList.SelectedItem;
+            if (currentGroup == null)
+            {
+                ShowErrorMessageBox("No group selected.");
+                return;
+            }
+
+            string newTopicName = this.TopicNameTextBox.Text;
+            if (string.IsNullOrWhiteSpace(newTopicName))
+            {
+                ShowErrorMessageBox("No topic name entered.");
+                return;
+            }
+
+            Topic newTopic = new Topic { Name = newTopicName, Starter = currentUser };
+            currentGroup.Topics.Add(newTopic);
+            this.TopicsList.ItemsSource = currentGroup.Topics;
+            this.TopicsList.SelectedItem = newTopic;
         }
 
         private void AddMessageButton_OnClick(object sender, RoutedEventArgs e)
@@ -176,7 +201,7 @@ namespace Teatime
             Group g = (Group)this.GroupsList.SelectedItem;
             if (g == null)
             {
-                ShowErrorMessageBox("No topic selected.");
+                ShowErrorMessageBox("No group selected.");
                 return;
             }
 
