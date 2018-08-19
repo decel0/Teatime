@@ -67,6 +67,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddressBookWindow.xaml.cs">
+      <DependentUpon>AddressBookWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CreateGroupWindow.xaml.cs">
       <DependentUpon>CreateGroupWindow.xaml</DependentUpon>
     </Compile>
@@ -76,6 +82,14 @@
     <Compile Include="Utils\ParticipantFactory.cs" />
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\XmlConvert.cs" />
+    <Page Include="SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AddressBookWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="CreateGroupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

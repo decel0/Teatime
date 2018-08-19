@@ -231,10 +231,14 @@ namespace Teatime
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
+            SettingsWindow w = new SettingsWindow();
+            w.ShowDialog();
         }
 
         private void AddressBookButton_OnClick(object sender, RoutedEventArgs e)
         {
+            AddressBookWindow w = new AddressBookWindow(null);
+            w.ShowDialog();
         }
     }
 }
