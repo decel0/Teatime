@@ -237,7 +237,7 @@ namespace Teatime
 
         private void AddressBookButton_OnClick(object sender, RoutedEventArgs e)
         {
-            AddressBookWindow w = new AddressBookWindow(null);
+            AddressBookWindow w = new AddressBookWindow(Participants);
             w.ShowDialog();
         }
     }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Teatime"
         xmlns:model="clr-namespace:Teatime.Model"
         mc:Ignorable="d"
-        Title="Address Book" Height="500" Width="300">
+        Title="Address Book" Height="300" Width="600">
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
