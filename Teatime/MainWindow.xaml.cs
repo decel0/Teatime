@@ -120,7 +120,7 @@ namespace Teatime
             w.ShowDialog();
             List<Participant> selectedParticipants = w.SelectedParticipants;
 
-            if (selectedParticipants.Count == 0) return;
+            if (selectedParticipants == null || selectedParticipants.Count == 0) return;
 
             Group newGroup = new Group();
             selectedParticipants.ForEach(p => newGroup.Participants.Add(p));
