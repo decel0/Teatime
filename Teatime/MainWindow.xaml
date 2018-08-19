@@ -24,6 +24,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button x:Name="ReloadButton" Content="Reload" Margin="0,10,10,0" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="ReloadButton_OnClick" />
+                <Button x:Name="SettingsButton" Content="Settings" Margin="0,10,10,0" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="SettingsButton_OnClick" />
             </StackPanel>
             <Grid Grid.Row="1" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
@@ -60,7 +61,10 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Button Grid.Row="2" Grid.Column="0" x:Name="CreateGroupButton" Content="Create Group" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="CreateGroupButton_OnClick" />
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="CreateGroupButton" Content="Create Group" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="CreateGroupButton_OnClick" />
+                    <Button x:Name="AddressBookButton" Content="Address Book" Margin="0,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="AddressBookButton_OnClick" />
+                </StackPanel>
                 <Grid Grid.Row="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>

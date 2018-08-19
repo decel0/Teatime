@@ -228,5 +228,13 @@ namespace Teatime
         {
             this.LogTextBlock.Inlines.Clear();
         }
+
+        private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void AddressBookButton_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }
