@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Teatime"
         xmlns:model="clr-namespace:Teatime.Model"
         mc:Ignorable="d"
-        Title="Settings" Height="500" Width="300">
+        Title="Settings" Height="600" Width="800">
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -15,6 +15,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
+        <DataGrid Grid.Row="0" Grid.Column="0" x:Name="EmailAccountDataGrid" Margin="10,10,10,10" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding (model:EmailAccount.Name)}" Width="*" />
+                <DataGridTextColumn Header="Display Text" Binding="{Binding (model:EmailAccount.DisplayText)}" Width="*" />
+                <DataGridTextColumn Header="E-Mail Address" Binding="{Binding (model:EmailAccount.EmailAddress)}" Width="*" />
+                <DataGridTextColumn Header="E-Mail Password" Binding="{Binding (model:EmailAccount.EmailPassword)}" Width="*" />
+                <DataGridTextColumn Header="E-Mail Host" Binding="{Binding (model:EmailAccount.EmailHost)}" Width="*" />
+                <DataGridTextColumn Header="IMAP Port" Binding="{Binding (model:EmailAccount.ImapPort)}" Width="*" />
+                <DataGridTextColumn Header="SMTP Port" Binding="{Binding (model:EmailAccount.SmtpPort)}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Grid.Row="1" Grid.Column="0" x:Name="CloseButton" Content="Close" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="CloseButton_OnClick" />
     </Grid>
 </Window>

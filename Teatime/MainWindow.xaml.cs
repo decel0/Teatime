@@ -21,10 +21,10 @@ namespace Teatime
 {
     public partial class MainWindow : Window
     {
-        public static readonly Participant RobertJ = ParticipantFactory.CreateParticipant("Robert Johnson");
-        public static readonly Participant JasonS = ParticipantFactory.CreateParticipant("Jason Smith");
-        public static readonly Participant LisaD = ParticipantFactory.CreateParticipant("Lisa Davis");
-        public static readonly Participant AmyR = ParticipantFactory.CreateParticipant("Amy Robinson");
+        public static readonly Participant RobertJ = ModelFactory.CreateParticipant("Robert Johnson");
+        public static readonly Participant JasonS = ModelFactory.CreateParticipant("Jason Smith");
+        public static readonly Participant LisaD = ModelFactory.CreateParticipant("Lisa Davis");
+        public static readonly Participant AmyR = ModelFactory.CreateParticipant("Amy Robinson");
         public static readonly List<Participant> Participants = new List<Participant>();
 
         private readonly TextBlockLogger logger;
@@ -231,7 +231,13 @@ namespace Teatime
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            SettingsWindow w = new SettingsWindow();
+            List<EmailAccount> emailAccounts = new List<EmailAccount>();
+            foreach (Participant p in Participants)
+            {
+                emailAccounts.Add(ModelFactory.CreateEmailAccount(p, "hmail.local", 143, 25));
+            }
+
+            SettingsWindow w = new SettingsWindow(emailAccounts);
             w.ShowDialog();
         }
 

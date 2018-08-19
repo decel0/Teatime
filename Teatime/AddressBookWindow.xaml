@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Teatime"
         xmlns:model="clr-namespace:Teatime.Model"
         mc:Ignorable="d"
-        Title="Address Book" Height="300" Width="600">
+        Title="Address Book" Height="600" Width="600">
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -15,7 +15,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Row="0" Grid.Column="0" x:Name="AddressBookDataGrid" Margin="10,10,10,10"  />
+        <DataGrid Grid.Row="0" Grid.Column="0" x:Name="AddressBookDataGrid" Margin="10,10,10,10" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding (model:Participant.Name)}" Width="*" />
+                <DataGridTextColumn Header="Display Text" Binding="{Binding (model:Participant.DisplayText)}" Width="*" />
+                <DataGridTextColumn Header="E-Mail Address" Binding="{Binding (model:Participant.EmailAddress)}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Grid.Row="1" Grid.Column="0" x:Name="CloseButton" Content="Close" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="CloseButton_OnClick" />
     </Grid>
 </Window>
