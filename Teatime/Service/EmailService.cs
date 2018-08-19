@@ -42,7 +42,7 @@ namespace Teatime.Service
                 mimeMessage.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(te, Formatting.Indented) };
 
                 client.Send(mimeMessage);
-                logger.LogInfo($"E-Mail with topic \"{topicName}\" sent to \"{te.ToEmailAddresses}\".");
+                logger.LogInfo($"E-Mail with topic \"{topicName}\" sent to \"{string.Join(", ", te.ToEmailAddresses)}\".");
 
                 client.Disconnect(quit: true);
             }
