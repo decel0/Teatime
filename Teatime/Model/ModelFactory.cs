@@ -2,28 +2,26 @@
 {
     public class ModelFactory
     {
-        public static Participant CreateParticipant(string name)
-        {
-            Participant p = new Participant();
-            p.Name = name;
-            string[] parts = name.Split(' ');
-            p.DisplayText = parts[0][0].ToString().ToUpperInvariant() + parts[1][0].ToString().ToUpperInvariant();
-            p.EmailAddress = p.DisplayText.ToLowerInvariant() + "@hmail.local";
-            p.EmailPassword = p.DisplayText.ToLowerInvariant();
-            return p;
-        }
-
-        public static EmailAccount CreateEmailAccount(Participant p, string emailHost, int smtpPort, int imapPort)
+        public static EmailAccount CreateEmailAccount(string name, string emailHost, int smtpPort, int imapPort)
         {
             EmailAccount ea = new EmailAccount();
-            ea.Name = p.Name;
-            ea.DisplayText = p.DisplayText;
-            ea.EmailAddress = p.EmailAddress;
-            ea.EmailPassword = p.EmailPassword;
+            ea.Name = name;
+            ea.DisplayText = GetInitials(name);
+            ea.EmailAddress = ea.DisplayText.ToLower() + "@" + emailHost;
+            ea.EmailPassword = ea.DisplayText.ToLower();
             ea.EmailHost = emailHost;
             ea.SmtpPort = smtpPort;
             ea.ImapPort = imapPort;
             return ea;
+        }
+
+        private static string GetInitials(string name)
+        {
+            string[] parts = name.Split(' ');
+            string firstName = parts[0];
+            string lastName = parts[1];
+            string initials = $"{firstName[0]}{lastName[0]}";
+            return initials.ToUpper();
         }
     }
 }

@@ -15,5 +15,15 @@
         public int ImapPort { get; set; }
 
         public int SmtpPort { get; set; }
+
+        public Participant ToParticipant()
+        {
+            return new Participant
+            {
+                Name = this.Name,
+                DisplayText = this.DisplayText,
+                EmailAddress = this.EmailAddress
+            };
+        }
     }
 }

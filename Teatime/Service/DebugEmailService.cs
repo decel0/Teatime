@@ -12,16 +12,12 @@ namespace Teatime.Service
 {
     public class DebugEmailService
     {
-        private const string Host = "hmail.local";
-        private const int ImapPort = 143;
-        private const int SmtpPort = 25;
-
-        public static void ListInboxFolders(Participant inboxOwner, ILogger logger)
+        public static void ListInboxFolders(EmailAccount inboxOwner, ILogger logger)
         {
             using (var client = new ImapClient())
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true; // Accept all certificates
-                client.Connect(Host, ImapPort, useSsl: false);
+                client.Connect(inboxOwner.EmailHost, inboxOwner.ImapPort, useSsl: false);
                 client.Authenticate(inboxOwner.EmailAddress, inboxOwner.EmailPassword);
 
                 IMailFolder personal = client.GetFolder(client.PersonalNamespaces[0]);
@@ -44,11 +40,11 @@ namespace Teatime.Service
             }
         }
 
-        public static void SendMessage(Participant sender, Participant recipient, ILogger logger)
+        public static void SendMessage(EmailAccount sender, Participant recipient, ILogger logger)
         {
             using (var client = new SmtpClient())
             {
-                client.Connect(Host, SmtpPort);
+                client.Connect(sender.EmailHost, sender.SmtpPort);
                 client.Authenticate(sender.EmailAddress, sender.EmailPassword);
 
                 var message = new MimeMessage();
@@ -72,12 +68,12 @@ namespace Teatime.Service
             }
         }
 
-        public static void ListInboxMessages(Participant inboxOwner, ILogger logger)
+        public static void ListInboxMessages(EmailAccount inboxOwner, ILogger logger)
         {
             using (var client = new ImapClient())
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true; // Accept all certificates
-                client.Connect(Host, ImapPort, useSsl: false);
+                client.Connect(inboxOwner.EmailHost, inboxOwner.ImapPort, useSsl: false);
                 client.Authenticate(inboxOwner.EmailAddress, inboxOwner.EmailPassword);
 
                 var inbox = client.Inbox; // Always available

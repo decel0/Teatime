@@ -8,8 +8,6 @@
 
         public string EmailAddress { get; set; }
 
-        public string EmailPassword { get; set; }
-
         //public ??? AvatarThumbnail { get; set; }
 
         public Participant()

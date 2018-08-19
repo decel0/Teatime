@@ -15,27 +15,24 @@ namespace Teatime.Service
 {
     public class EmailService
     {
-        private const string Host = "hmail.local";
-        private const int ImapPort = 143;
-        private const int SmtpPort = 25;
-
-        public static void SendMessage(Participant sender, List<Participant> recipients, string topicName, string messageText, ILogger logger)
+        public static void SendMessage(EmailAccount sender, SortedSet<Participant> recipients, string topicName, string messageText, ILogger logger)
         {
-            List<Participant> actualRecipients = recipients.Where(r => !r.Equals(sender)).ToList(); // Don't send to sender. Rely on local lie.
-
             using (var client = new SmtpClient())
             {
-                client.Connect(Host, SmtpPort);
+                client.Connect(sender.EmailHost, sender.SmtpPort);
                 client.Authenticate(sender.EmailAddress, sender.EmailPassword);
 
                 MimeMessage mimeMessage = new MimeMessage();
                 mimeMessage.From.Add(new MailboxAddress(sender.Name, sender.EmailAddress));
-                actualRecipients.ForEach(r => mimeMessage.To.Add(new MailboxAddress(r.Name, r.EmailAddress)));
+                foreach (Participant r in recipients)
+                {
+                    mimeMessage.To.Add(new MailboxAddress(r.Name, r.EmailAddress));
+                }
                 mimeMessage.Subject = TeatimeEmail.SubjectTag + " " + DateTime.Now.ToString("o");
 
                 TeatimeEmail te = new TeatimeEmail();
                 te.FromEmailAddress = sender.EmailAddress;
-                te.ToEmailAddresses = actualRecipients.Select(r => r.EmailAddress).ToList();
+                te.ToEmailAddresses = recipients.Select(r => r.EmailAddress).ToList();
                 te.TopicName = topicName;
                 te.MessageText = messageText;
 
@@ -48,14 +45,14 @@ namespace Teatime.Service
             }
         }
 
-        public static List<Group> LoadData(Participant inboxOwner, ILogger logger)
+        public static List<Group> LoadData(EmailAccount inboxOwner, ILogger logger)
         {
             Dictionary<string, Group> groups = new Dictionary<string, Group>();
 
             using (var client = new ImapClient())
             {
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true; // Accept all certificates
-                client.Connect(Host, ImapPort, useSsl: false);
+                client.Connect(inboxOwner.EmailHost, inboxOwner.ImapPort, useSsl: false);
                 client.Authenticate(inboxOwner.EmailAddress, inboxOwner.EmailPassword);
 
                 var inbox = client.Inbox; // Always available
@@ -103,7 +100,6 @@ namespace Teatime.Service
             return g;
         }
 
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
         private static void AddParticipantsToGroup(
             Group g, 
             string senderEmailAddress, 

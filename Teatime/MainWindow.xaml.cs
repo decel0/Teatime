@@ -21,11 +21,8 @@ namespace Teatime
 {
     public partial class MainWindow : Window
     {
-        public static readonly Participant RobertJ = ModelFactory.CreateParticipant("Robert Johnson");
-        public static readonly Participant JasonS = ModelFactory.CreateParticipant("Jason Smith");
-        public static readonly Participant LisaD = ModelFactory.CreateParticipant("Lisa Davis");
-        public static readonly Participant AmyR = ModelFactory.CreateParticipant("Amy Robinson");
-        public static readonly List<Participant> Participants = new List<Participant>();
+        public static readonly List<EmailAccount> EmailAccounts = new List<EmailAccount>();
+        public static readonly List<Participant> AddressBook = new List<Participant>();
 
         private readonly TextBlockLogger logger;
 
@@ -37,12 +34,17 @@ namespace Teatime
 
             this.logger = new TextBlockLogger(this.LogTextBlock, this.LogScrollViewer);
 
-            Participants.Add(RobertJ);
-            Participants.Add(JasonS);
-            Participants.Add(LisaD);
-            Participants.Add(AmyR);
+            EmailAccounts.Add(ModelFactory.CreateEmailAccount("Robert Johnson", emailHost: "hmail.local", smtpPort: 25, imapPort: 143));
+            EmailAccounts.Add(ModelFactory.CreateEmailAccount("Jason Smith", emailHost: "hmail.local", smtpPort: 25, imapPort: 143));
+            EmailAccounts.Add(ModelFactory.CreateEmailAccount("Lisa Davis", emailHost: "hmail.local", smtpPort: 25, imapPort: 143));
+            EmailAccounts.Add(ModelFactory.CreateEmailAccount("Amy Robinson", emailHost: "hmail.local", smtpPort: 25, imapPort: 143));
 
-            this.EmailAccountComboBox.ItemsSource = Participants;
+            foreach (EmailAccount ea in EmailAccounts)
+            {
+                AddressBook.Add(ea.ToParticipant());
+            }
+
+            this.EmailAccountComboBox.ItemsSource = EmailAccounts;
         }
 
         private void GroupsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -89,14 +91,14 @@ namespace Teatime
 
         private void Reload()
         {
-            Participant currentUser = (Participant) this.EmailAccountComboBox.SelectedItem;
-            if (currentUser == null)
+            EmailAccount currentEmailAccount = (EmailAccount) this.EmailAccountComboBox.SelectedItem;
+            if (currentEmailAccount == null)
             {
                 this.ShowErrorMessage("No e-mail account selected.");
                 return;
             }
 
-            List<Group> groups = EmailService.LoadData(currentUser, this.logger);
+            List<Group> groups = EmailService.LoadData(currentEmailAccount, this.logger);
             this.GroupsList.ItemsSource = groups;
             if (groups.Count > 0)
             {
@@ -107,15 +109,14 @@ namespace Teatime
 
         private void CreateGroupButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
-            if (currentUser == null)
+            EmailAccount currentEmailAccount = (EmailAccount)this.EmailAccountComboBox.SelectedItem;
+            if (currentEmailAccount == null)
             {
                 this.ShowErrorMessage("No e-mail account selected.");
                 return;
             }
 
-            List<Participant> participants = Participants.Where(p => p.EmailAddress != currentUser.EmailAddress).ToList();
-            CreateGroupWindow w = new CreateGroupWindow(participants);
+            CreateGroupWindow w = new CreateGroupWindow(this.GetAddressBookWithoutCurrentEmailAccount(currentEmailAccount));
             w.ShowDialog();
             List<Participant> selectedParticipants = w.SelectedParticipants;
 
@@ -147,8 +148,8 @@ namespace Teatime
 
         private void AddTopicButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
-            if (currentUser == null)
+            EmailAccount currentEmailAccount = (EmailAccount)this.EmailAccountComboBox.SelectedItem;
+            if (currentEmailAccount == null)
             {
                 this.ShowErrorMessage("No e-mail account selected.");
                 return;
@@ -168,7 +169,7 @@ namespace Teatime
                 return;
             }
 
-            Topic newTopic = new Topic { Name = newTopicName, Starter = currentUser };
+            Topic newTopic = new Topic { Name = newTopicName, Starter = currentEmailAccount.ToParticipant() };
             currentGroup.Topics.Add(newTopic);
             
             this.TopicNameTextBox.Clear();
@@ -178,8 +179,8 @@ namespace Teatime
 
         private void AddMessageButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
-            if (currentUser == null)
+            EmailAccount currentEmailAccount = (EmailAccount)this.EmailAccountComboBox.SelectedItem;
+            if (currentEmailAccount == null)
             {
                 this.ShowErrorMessage("No e-mail account selected.");
                 return;
@@ -206,9 +207,9 @@ namespace Teatime
                 return;
             }
 
-            EmailService.SendMessage(currentUser, g.Participants.ToList(), t.Name, messageBody, this.logger);
+            EmailService.SendMessage(currentEmailAccount, g.Participants, t.Name, messageBody, this.logger);
 
-            Message newMessage = new Message { Sender = currentUser, Body = messageBody };
+            Message newMessage = new Message { Sender = currentEmailAccount.ToParticipant(), Body = messageBody };
             t.Messages.Add(newMessage);
 
             this.MessageBodyTextBox.Clear();
@@ -231,20 +232,26 @@ namespace Teatime
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            List<EmailAccount> emailAccounts = new List<EmailAccount>();
-            foreach (Participant p in Participants)
-            {
-                emailAccounts.Add(ModelFactory.CreateEmailAccount(p, "hmail.local", 143, 25));
-            }
-
-            SettingsWindow w = new SettingsWindow(emailAccounts);
+            SettingsWindow w = new SettingsWindow(EmailAccounts);
             w.ShowDialog();
         }
 
         private void AddressBookButton_OnClick(object sender, RoutedEventArgs e)
         {
-            AddressBookWindow w = new AddressBookWindow(Participants);
+            EmailAccount currentEmailAccount = (EmailAccount)this.EmailAccountComboBox.SelectedItem;
+            if (currentEmailAccount == null)
+            {
+                this.ShowErrorMessage("No e-mail account selected.");
+                return;
+            }
+
+            AddressBookWindow w = new AddressBookWindow(this.GetAddressBookWithoutCurrentEmailAccount(currentEmailAccount));
             w.ShowDialog();
+        }
+
+        private List<Participant> GetAddressBookWithoutCurrentEmailAccount(EmailAccount currentEmailAccount)
+        {
+            return AddressBook.Where(p => p.EmailAddress != currentEmailAccount.EmailAddress).ToList();
         }
     }
 }
