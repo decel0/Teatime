@@ -27,7 +27,7 @@ namespace Teatime
         public static readonly Participant AmyR = ParticipantFactory.CreateParticipant("Amy Robinson");
         public static readonly List<Participant> Participants = new List<Participant>();
 
-        private readonly TextBoxLogger textBoxLogger;
+        private readonly TextBlockLogger logger;
 
         public MainWindow()
         {
@@ -35,7 +35,7 @@ namespace Teatime
 
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            this.textBoxLogger = new TextBoxLogger(this.LogTextBox);
+            this.logger = new TextBlockLogger(this.LogTextBlock, this.LogScrollViewer);
 
             Participants.Add(RobertJ);
             Participants.Add(JasonS);
@@ -77,21 +77,6 @@ namespace Teatime
             }
         }
 
-        private void ListFoldersButton_Click(object sender, RoutedEventArgs e)
-        {
-            DebugEmailService.ListInboxFolders(RobertJ, this.textBoxLogger);
-        }
-
-        private void ListMessagesButton_Click(object sender, RoutedEventArgs e)
-        {
-            DebugEmailService.ListInboxMessages(JasonS, this.textBoxLogger);
-        }
-
-        private void SendMessageButton_Click(object sender, RoutedEventArgs e)
-        {
-            DebugEmailService.SendMessage(RobertJ, JasonS, this.textBoxLogger);
-        }
-
         private void EmailAccountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.Reload();
@@ -107,11 +92,11 @@ namespace Teatime
             Participant currentUser = (Participant) this.EmailAccountComboBox.SelectedItem;
             if (currentUser == null)
             {
-                ShowErrorMessageBox("No e-mail account selected.");
+                this.ShowErrorMessage("No e-mail account selected.");
                 return;
             }
 
-            List<Group> groups = EmailService.LoadData(currentUser);
+            List<Group> groups = EmailService.LoadData(currentUser, this.logger);
             this.GroupsList.ItemsSource = groups;
             if (groups.Count > 0)
             {
@@ -125,7 +110,7 @@ namespace Teatime
             Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
             if (currentUser == null)
             {
-                ShowErrorMessageBox("No e-mail account selected.");
+                this.ShowErrorMessage("No e-mail account selected.");
                 return;
             }
 
@@ -165,21 +150,21 @@ namespace Teatime
             Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
             if (currentUser == null)
             {
-                ShowErrorMessageBox("No e-mail account selected.");
+                this.ShowErrorMessage("No e-mail account selected.");
                 return;
             }
 
             Group currentGroup = (Group)this.GroupsList.SelectedItem;
             if (currentGroup == null)
             {
-                ShowErrorMessageBox("No group selected.");
+                this.ShowErrorMessage("No group selected.");
                 return;
             }
 
             string newTopicName = this.TopicNameTextBox.Text;
             if (string.IsNullOrWhiteSpace(newTopicName))
             {
-                ShowErrorMessageBox("No topic name entered.");
+                this.ShowErrorMessage("No topic name entered.");
                 return;
             }
 
@@ -196,32 +181,32 @@ namespace Teatime
             Participant currentUser = (Participant)this.EmailAccountComboBox.SelectedItem;
             if (currentUser == null)
             {
-                ShowErrorMessageBox("No e-mail account selected.");
+                this.ShowErrorMessage("No e-mail account selected.");
                 return;
             }
 
             Group g = (Group)this.GroupsList.SelectedItem;
             if (g == null)
             {
-                ShowErrorMessageBox("No group selected.");
+                this.ShowErrorMessage("No group selected.");
                 return;
             }
 
             Topic t = (Topic)this.TopicsList.SelectedItem;
             if (t == null)
             {
-                ShowErrorMessageBox("No topic selected.");
+                this.ShowErrorMessage("No topic selected.");
                 return;
             }
 
             string messageBody = this.MessageBodyTextBox.Text;
             if (string.IsNullOrWhiteSpace(messageBody))
             {
-                ShowErrorMessageBox("No message entered.");
+                this.ShowErrorMessage("No message entered.");
                 return;
             }
 
-            EmailService.SendMessage(currentUser, g.Participants.ToList(), t.Name, messageBody);
+            EmailService.SendMessage(currentUser, g.Participants.ToList(), t.Name, messageBody, this.logger);
 
             Message newMessage = new Message { Sender = currentUser, Body = messageBody };
             t.Messages.Add(newMessage);
@@ -231,17 +216,17 @@ namespace Teatime
             this.MessagesList.SelectedIndex = this.MessagesList.Items.Count - 1;
         }
 
-        private static void ShowErrorMessageBox(string messageBoxText)
+        private void ShowErrorMessage(string message)
         {
-            const string caption = "Error";
-            MessageBoxButton button = MessageBoxButton.OK;
-            MessageBoxImage icon = MessageBoxImage.Error;
-            MessageBox.Show(messageBoxText, caption, button, icon);
+//            MessageBoxButton button = MessageBoxButton.OK;
+//            MessageBoxImage icon = MessageBoxImage.Error;
+//            MessageBox.Show(message, "Error", button, icon);
+            this.logger.LogError(message);
         }
 
-        private void GenerateSampleData_Click(object sender, RoutedEventArgs e)
+        private void ClearLogButton_OnClick(object sender, RoutedEventArgs e)
         {
-            SampleDataGenerator.Generate();
+            this.LogTextBlock.Inlines.Clear();
         }
     }
 }

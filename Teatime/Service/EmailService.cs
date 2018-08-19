@@ -9,6 +9,7 @@ using MailKit.Net.Smtp;
 using MailKit.Search;
 using Newtonsoft.Json;
 using Teatime.Model;
+using Teatime.Utils;
 
 namespace Teatime.Service
 {
@@ -18,7 +19,7 @@ namespace Teatime.Service
         private const int ImapPort = 143;
         private const int SmtpPort = 25;
 
-        public static void SendMessage(Participant sender, List<Participant> recipients, string topicName, string messageText)
+        public static void SendMessage(Participant sender, List<Participant> recipients, string topicName, string messageText, ILogger logger)
         {
             List<Participant> actualRecipients = recipients.Where(r => !r.Equals(sender)).ToList(); // Don't send to sender. Rely on local lie.
 
@@ -41,12 +42,13 @@ namespace Teatime.Service
                 mimeMessage.Body = new TextPart("plain") { Text = JsonConvert.SerializeObject(te, Formatting.Indented) };
 
                 client.Send(mimeMessage);
+                logger.LogInfo($"E-Mail with topic \"{topicName}\" sent to \"{te.ToEmailAddresses}\".");
 
                 client.Disconnect(quit: true);
             }
         }
 
-        public static List<Group> LoadData(Participant inboxOwner)
+        public static List<Group> LoadData(Participant inboxOwner, ILogger logger)
         {
             Dictionary<string, Group> groups = new Dictionary<string, Group>();
 
@@ -71,6 +73,7 @@ namespace Teatime.Service
                     Group g = AddOrGetGroup(groups, sender.EmailAddress, inboxOwner.EmailAddress, te.ToEmailAddresses);
                     Topic t = AddOrGetTopic(g, sender, te.TopicName);
                     AddMessage(t, sender, te.MessageText);
+                    logger.LogInfo($"Loaded message from \"{te.FromEmailAddress}\" to \"{string.Join(", ", te.ToEmailAddresses)}\" for group \"{g.DisplayText}\" and topic \"{t.Name}\".");
                 }
 
                 client.Disconnect(true);

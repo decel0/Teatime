@@ -12,6 +12,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <Label Content="E-Mail Account:" HorizontalAlignment="Left" Margin="5,10,10,0" />
@@ -34,7 +35,6 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="Groups" HorizontalAlignment="Left" Margin="5,0,0,0" />
                 <Label Grid.Row="0" Grid.Column="1" Content="Topics" HorizontalAlignment="Left" Margin="-5,0,0,0" />
@@ -60,13 +60,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <StackPanel Grid.Row="1" Grid.Column="3">
-                    <Button x:Name="GenerateSampleDataButton" Content="Generate Sample Data" Margin="10,0,10,0" Click="GenerateSampleData_Click"/>
-                    <Button x:Name="ListFoldersButton" Content="List Folders" Margin="10,10,10,0" Click="ListFoldersButton_Click"/>
-                    <Button x:Name="ListMessagesButton" Content="List Messages" Margin="10,10,10,0" Click="ListMessagesButton_Click"/>
-                    <Button x:Name="SendMessageButton" Content="Send Message"  Margin="10,10,10,0" Click="SendMessageButton_Click"/>
-                    <TextBox x:Name="LogTextBox" Height="500" TextWrapping="Wrap" Margin="10,10,10,0" />
-                </StackPanel>
                 <Button Grid.Row="2" Grid.Column="0" x:Name="CreateGroupButton" Content="Create Group" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="CreateGroupButton_OnClick" />
                 <Grid Grid.Row="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
@@ -84,6 +77,23 @@
                     <TextBox Grid.Column="0" x:Name="MessageBodyTextBox" Padding="5,5,5,5" Margin="0,0,10,10" ></TextBox>
                     <Button Grid.Column="1" x:Name="AddMessageButton" Content="Add Message" Margin="0,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="AddMessageButton_OnClick" />
                 </Grid>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Content="Log" HorizontalAlignment="Left" Margin="5,0,0,0" />
+                <Border Grid.Row="1" BorderBrush="DarkGray" BorderThickness="1" Margin="10,0,10,10" >
+                    <ScrollViewer x:Name="LogScrollViewer" CanContentScroll="True" VerticalScrollBarVisibility="Visible" MaxHeight="100">
+                        <TextBlock x:Name="LogTextBlock" MinHeight="100" Height="Auto" TextWrapping="Wrap" Margin="2,2,2,2" VerticalAlignment="Top" />
+                    </ScrollViewer>
+                </Border>
+                <Button Grid.Row="2" x:Name="ClearLogButton" Content="Clear Log" Margin="10,0,10,10" Padding="5,5,5,5" Width="Auto" HorizontalAlignment="Left" Click="ClearLogButton_OnClick" />
             </Grid>
         </Grid>
     </DockPanel>

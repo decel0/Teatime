@@ -1,24 +1,46 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Teatime.Utils
 {
     public interface ILogger
     {
-        void Log(string text);
+        void LogInfo(string message);
+        void LogError(string message);
     }
 
-    public class TextBoxLogger : ILogger
+    public class TextBlockLogger : ILogger
     {
-        private readonly TextBox logTextBox;
+        private readonly TextBlock logTextBlock;
+        private readonly ScrollViewer logScrollViewer;
 
-        public TextBoxLogger(TextBox logTextBox)
+        public TextBlockLogger(TextBlock logTextBlock, ScrollViewer logScrollViewer)
         {
-            this.logTextBox = logTextBox;
+            this.logTextBlock = logTextBlock;
+            this.logScrollViewer = logScrollViewer;
         }
 
-        public void Log(string text)
+        public void LogInfo(string message)
         {
-            this.logTextBox.Text += text + "\r\n";
+            this.Log("Info", Brushes.Black, message);
+        }
+
+        public void LogError(string message)
+        {
+            this.Log("Error", Brushes.Red, message);
+        }
+
+        private void Log(string caption, SolidColorBrush textColor, string message)
+        {
+            string timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH\\:mm\\:ss");
+            string output = $"[{timestamp}] {caption}: {message}{Environment.NewLine}";
+
+            Run run = new Run(output);
+            run.Foreground = textColor;
+            this.logTextBlock.Inlines.Add(run);
+            this.logScrollViewer.ScrollToBottom();
         }
     }
 }

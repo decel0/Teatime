@@ -27,17 +27,17 @@ namespace Teatime.Service
                 IMailFolder personal = client.GetFolder(client.PersonalNamespaces[0]);
                 foreach (IMailFolder folder in personal.GetSubfolders(false))
                 {
-                    logger.Log($"[folder] {folder.Name}");
+                    logger.LogInfo($"[folder] {folder.Name}");
                 }
 
                 if ((client.Capabilities & (ImapCapabilities.SpecialUse | ImapCapabilities.XList)) != 0)
                 {
                     IMailFolder drafts = client.GetFolder(SpecialFolder.Sent);
-                    logger.Log($"[special SENT folder] {drafts.Name}");
+                    logger.LogInfo($"[special SENT folder] {drafts.Name}");
                 }
                 else
                 {
-                    logger.Log("unable to get special SENT folder");
+                    logger.LogInfo("unable to get special SENT folder");
                 }
 
                 client.Disconnect(true);
@@ -66,7 +66,7 @@ namespace Teatime.Service
                 //message.Body = new TextPart("plain") { Text = XmlConvert.SerializeObject(te) };
 
                 client.Send(message);
-                logger.Log($"Message sent.");
+                logger.LogInfo($"Message sent.");
 
                 client.Disconnect(quit: true);
             }
@@ -83,28 +83,28 @@ namespace Teatime.Service
                 var inbox = client.Inbox; // Always available
                 inbox.Open(FolderAccess.ReadOnly);
 
-                logger.Log($"Total messages: {inbox.Count}");
-                logger.Log($"Recent messages: {inbox.Recent}");
+                logger.LogInfo($"Total messages: {inbox.Count}");
+                logger.LogInfo($"Recent messages: {inbox.Recent}");
 
                 for (int i = 0; i < inbox.Count; i++)
                 {
                     var message = inbox.GetMessage(i);
-                    logger.Log($"Subject: {message.Subject}");
+                    logger.LogInfo($"Subject: {message.Subject}");
                     string body = message.TextBody;
                     TeatimeEmail te = JsonConvert.DeserializeObject<TeatimeEmail>(body);
                     //TeatimeEmail te = XmlConvert.DeserializeObject<TeatimeEmail>(body);
-                    logger.Log($"From: {te.FromEmailAddress}");
+                    logger.LogInfo($"From: {te.FromEmailAddress}");
                     foreach (string toEmailAddress in te.ToEmailAddresses)
                     {
-                        logger.Log($"To: {toEmailAddress}");
+                        logger.LogInfo($"To: {toEmailAddress}");
                     }
-                    logger.Log($"Topic: {te.TopicName}");
-                    logger.Log($"Message: {te.MessageText}");
+                    logger.LogInfo($"Topic: {te.TopicName}");
+                    logger.LogInfo($"Message: {te.MessageText}");
                 }
 
                 foreach (var summary in inbox.Fetch(0, -1, MessageSummaryItems.Full | MessageSummaryItems.UniqueId))
                 {
-                    logger.Log($"[summary] {summary.Index:D2}: {summary.Envelope.Subject}");
+                    logger.LogInfo($"[summary] {summary.Index:D2}: {summary.Envelope.Subject}");
                 }
 
                 client.Disconnect(true);
